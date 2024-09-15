@@ -14,7 +14,7 @@ const Navbar = () => {
         </Link>
         <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
           <Link to="/" className="mr-5 hover:text-white">
-            Search
+            SearchTS
           </Link>
           <Link to="/search" className="mr-5 hover:text-white">
             SearchDB
