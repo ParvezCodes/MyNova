@@ -486,4 +486,120 @@ router.get("/company_profile_collection", async (req, res) => {
   }
 });
 
+router.get("/single/:symbol", async (req, res) => {
+  const symbol = req.params.symbol;
+
+  try {
+    // get company_profile data from ts
+    const companyProfile = await axios.get(
+      `https://h3ques1ic9vt6z4rp-1.a1.typesense.net/collections/company_profile_collection/documents/${symbol}`,
+      {
+        headers: {
+          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
+        },
+      }
+    );
+
+    const { compliantRanking, id, isin, shariahCompliantStatus } =
+      companyProfile.data;
+
+    // get complianceMerlin data from ts
+    const complianceMerlin = await axios.get(
+      `https://h3ques1ic9vt6z4rp-1.a1.typesense.net/collections/compliance_collection_2/documents/${isin}`,
+      {
+        headers: {
+          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
+        },
+      }
+    );
+
+    const {
+      id: complianceId,
+      isin: complianceIsin,
+      ranking,
+      status,
+      stockName,
+    } = complianceMerlin.data;
+
+    const db_data = await axios.get(
+      "https://beta.infomanav.in/keep/finnhub_api_dev/prod/report/ALL_report_last_update.php"
+    );
+
+    const reportData = db_data.data;
+    const matchingSymbol = reportData.find((item) => item.stock_name === id);
+
+    if (matchingSymbol) {
+      var {
+        stock_name,
+        isin: reportIsin,
+        new_isin,
+        status: reportStatus,
+        ranking: reportRanking,
+      } = matchingSymbol;
+    } else {
+      var stock_name = null,
+        reportIsin = null,
+        new_isin = null,
+        reportStatus = null,
+        reportRanking = null;
+    }
+
+    const trimmedIsin = isin.trim();
+    const trimmedComplianceIsin = complianceIsin.trim();
+    const trimmedReportIsin = reportIsin ? reportIsin.trim() : null;
+
+    const trimmedRanking = compliantRanking.toString().trim();
+    const trimmedComplianceRanking = ranking.toString().trim();
+    const trimmedReportRanking = reportRanking
+      ? reportRanking.toString().trim()
+      : null;
+
+    const trimmedStatus = shariahCompliantStatus.trim();
+    const trimmedComplianceStatus = status.trim();
+    const trimmedReportStatus = reportStatus ? reportStatus.trim() : null;
+
+    // Field consistency checks
+    const isinMatch =
+      trimmedIsin === trimmedComplianceIsin &&
+      trimmedIsin === trimmedReportIsin;
+    const rankingMatch =
+      trimmedRanking === trimmedComplianceRanking &&
+      trimmedRanking === trimmedReportRanking;
+    const statusMatch =
+      trimmedStatus === trimmedComplianceStatus &&
+      trimmedStatus === trimmedReportStatus;
+
+    res.json({
+      CompanyProfileTS: {
+        compliantRanking,
+        symbol: id,
+        isin,
+        shariahCompliantStatus,
+      },
+      complianceMerlinTS: {
+        id: complianceId,
+        isin: complianceIsin,
+        ranking,
+        status,
+        stockName,
+      },
+      db_report: {
+        stock_name,
+        isin: reportIsin,
+        new_isin,
+        status: reportStatus,
+        ranking: reportRanking,
+      },
+      match: {
+        isinMatch, // True if all ISINs match
+        rankingMatch, // True if all rankings match
+        statusMatch, // True if all statuses match
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving data from API");
+  }
+});
+
 export default router;

@@ -14,19 +14,19 @@ const Navbar = () => {
         </Link>
         <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
           <Link to="/" className="mr-5 hover:text-white">
-            TypeSense
+            Search
           </Link>
           <Link to="/search" className="mr-5 hover:text-white">
-            Search
+            SearchDB
+          </Link>
+          <Link to="/searchTS" className="mr-5 hover:text-white">
+            TypeSense
           </Link>
           <Link to="/isin" className="mr-5 hover:text-white">
             ISIN
           </Link>
           <Link to="/prodCPlambdaCP" className="mr-5 hover:text-white">
             CP
-          </Link>
-          <Link to="/SingleShariahStatus" className="mr-5 hover:text-white">
-           ComplientStatus
           </Link>
         </nav>
         <button className="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">

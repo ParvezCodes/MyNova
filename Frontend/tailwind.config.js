@@ -4,10 +4,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'], 
+        sans: ["Poppins", "sans-serif"],
       },
       height: {
         "80vh": "80vh",
+        "94vh": "94vh",
       },
     },
   },
