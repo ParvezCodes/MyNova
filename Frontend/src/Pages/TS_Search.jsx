@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import Loader from "../Components/Loader";
+import { useState } from "react";
 import { URL } from "../App";
 import axios from "axios";
+import { CiSearch } from "react-icons/ci";
 
 const TS_Search = () => {
   const [symbol, setSymbol] = useState("");
@@ -24,6 +24,7 @@ const TS_Search = () => {
       console.log(res);
     } catch (error) {
       console.log(error);
+      setError(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -48,7 +49,7 @@ const TS_Search = () => {
             className="bg-gray-600 text-white font-semibold py-2 px-4 rounded hover:bg-gray-400"
             onClick={handleSearch}
           >
-            {loading ? "Loading..." : "Search"}
+            {loading ? "Loading..." : <CiSearch size={26}/>}
           </button>
         </div>
 
@@ -169,7 +170,9 @@ const TS_Search = () => {
 
                   <td
                     className={`p-2 border border-gray-700 ${
-                      data.match.rankingMatch ? "text-green-600" : "text-red-600"
+                      data.match.rankingMatch
+                        ? "text-green-600"
+                        : "text-red-600"
                     }`}
                   >
                     {data.match.rankingMatch ? "True" : "False"}

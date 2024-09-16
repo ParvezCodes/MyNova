@@ -500,6 +500,12 @@ router.get("/single/:symbol", async (req, res) => {
       }
     );
 
+    if (!companyProfile.data) {
+      return res.status(404).json({
+        error: "Symbol not found in company_profile_collection Typesense",
+      });
+    }
+
     const { compliantRanking, id, isin, shariahCompliantStatus } =
       companyProfile.data;
 
@@ -513,6 +519,12 @@ router.get("/single/:symbol", async (req, res) => {
       }
     );
 
+    if (!complianceMerlin) {
+      return res.status(404).json({
+        error: "Symbol not found in compliance_collection_2 Typesense",
+      });
+    }
+
     const {
       id: complianceId,
       isin: complianceIsin,
@@ -524,6 +536,10 @@ router.get("/single/:symbol", async (req, res) => {
     const db_data = await axios.get(
       "https://beta.infomanav.in/keep/finnhub_api_dev/prod/report/ALL_report_last_update.php"
     );
+
+    if (!db_data.data) {
+      return res.status(404).json({ error: "Symbol not found in DB API" });
+    }
 
     const reportData = db_data.data;
     const matchingSymbol = reportData.find((item) => item.stock_name === id);
@@ -591,14 +607,39 @@ router.get("/single/:symbol", async (req, res) => {
         ranking: reportRanking,
       },
       match: {
-        isinMatch, // True if all ISINs match
-        rankingMatch, // True if all rankings match
-        statusMatch, // True if all statuses match
+        isinMatch,
+        rankingMatch,
+        statusMatch,
       },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error retrieving data from API");
+    if (error.response) {
+      if (error.response.config.url.includes("company_profile_collection")) {
+        res.status(404).json({
+          error: "Symbol not found in company_profile_collection Typesense",
+        });
+      } else if (
+        error.response.config.url.includes("compliance_collection_2")
+      ) {
+        res.status(404).json({
+          error: "Symbol not found in compliance_collection_2 Typesense",
+        });
+      } else if (
+        error.response.config.url.includes("report/ALL_report_last_update")
+      ) {
+        res.status(404).json({ error: "Symbol not found in DB  API" });
+      } else {
+        res
+          .status(500)
+          .json({ error: "An unknown error occurred", details: error.message });
+      }
+    } else {
+      res.status(500).json({
+        error: "Internal Server Error",
+        details: error.message,
+      });
+    }
   }
 });
 
