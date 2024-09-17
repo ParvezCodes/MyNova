@@ -19,7 +19,7 @@ const TS_Search = () => {
     setError(null);
 
     try {
-      const res = await axios.get(`${URL}/api/v1/ts/single/${symbol}`);
+      const res = await axios.get(`${URL}/api/v1/ts/single2/${symbol}`);
       setData(res.data);
       console.log(res);
     } catch (error) {
@@ -64,25 +64,25 @@ const TS_Search = () => {
                 <tr className="bg-gray-700">
                   <th
                     colSpan="2"
-                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300"
+                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300 border border-gray-800"
                   >
                     CompanyProfile Typesense
                   </th>
                   <th
                     colSpan="2"
-                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300"
+                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300 border border-gray-800"
                   >
                     ComplianceMerlin Typesense
                   </th>
                   <th
                     colSpan="2"
-                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300"
+                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300 border border-gray-800"
                   >
                     DB Report
                   </th>
                   <th
                     colSpan="2"
-                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300"
+                    className="py-3.5 px-4 text-sm font-medium text-left text-gray-300 border border-gray-800"
                   >
                     Match
                   </th>
@@ -122,7 +122,7 @@ const TS_Search = () => {
                   </td>
                   <td className="p-2 border border-gray-700">Symbol</td>
                   <td className="p-2 border border-gray-700">
-                    {data.complianceMerlinTS.stockName}
+                    {data.complianceMerlinTS.stockName ?? "Not Found"}
                   </td>
                   <td className="p-2 border border-gray-700">Symbol</td>
                   <td className="p-2 border border-gray-700">
@@ -138,7 +138,7 @@ const TS_Search = () => {
                   </td>
                   <td className="p-2 border border-gray-700">ISIN</td>
                   <td className="p-2 border border-gray-700">
-                    {data.complianceMerlinTS.isin}
+                    {data.complianceMerlinTS.isin ?? "Not Found"}
                   </td>
                   <td className="p-2 border border-gray-700">ISIN</td>
                   <td className="p-2 border border-gray-700">
@@ -160,7 +160,7 @@ const TS_Search = () => {
                   </td>
                   <td className="p-2 border border-gray-700">Ranking</td>
                   <td className="p-2 border border-gray-700">
-                    {data.complianceMerlinTS.ranking}
+                    {data.complianceMerlinTS.ranking ?? "Not Found"}
                   </td>
                   <td className="p-2 border border-gray-700">Ranking</td>
                   <td className="p-2 border border-gray-700">
@@ -181,11 +181,11 @@ const TS_Search = () => {
                 <tr>
                   <td className="p-2 border border-gray-700">Status</td>
                   <td className="p-2 border border-gray-700">
-                    {data.CompanyProfileTS.shariahCompliantStatus}
+                    {data.CompanyProfileTS.shariahCompliantStatus ?? "Not Found"}
                   </td>
                   <td className="p-2 border border-gray-700">Status</td>
                   <td className="p-2 border border-gray-700">
-                    {data.complianceMerlinTS.status}
+                    {data.complianceMerlinTS.status ?? "Not Found"}
                   </td>
                   <td className="p-2 border border-gray-700">Status</td>
                   <td className="p-2 border border-gray-700">
