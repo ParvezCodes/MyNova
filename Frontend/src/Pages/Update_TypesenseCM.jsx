@@ -38,7 +38,7 @@ const Update_TypesenseCM = () => {
       </div>
 
       <div className="flex gap-8 mt-6">
-        <div className="w-7/10">
+        <div className="w-8/12">
           <h2 className="text-gray-800 mb-4">
             Pending Updates ({pendingData.length})
           </h2>
@@ -124,7 +124,7 @@ const Update_TypesenseCM = () => {
         </div>
 
         {/* Second table for completed updates - 30% width */}
-        <div className="w-3/10">
+        <div className="w-3/12">
           <h2 className="text-gray-800 mb-4">
             Pushed to typesense ({completedData.length})
           </h2>

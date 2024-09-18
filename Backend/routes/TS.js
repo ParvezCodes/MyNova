@@ -377,23 +377,21 @@ async function typesense_company_profile_collection() {
   let allRecords = [];
   let page = 1;
   let hasMoreRecords = true;
+  const url = process.env.TS_URL_PROD_SINGLE;
 
   console.log("Getting Data from Typesense........");
   while (hasMoreRecords) {
     try {
-      const response = await axios.get(
-        "https://h3ques1ic9vt6z4rp-1.a1.typesense.net/collections/company_profile_collection/documents/search",
-        {
-          params: {
-            q: "*",
-            per_page: 250,
-            page: page,
-          },
-          headers: {
-            "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
-          },
-        }
-      );
+      const response = await axios.get(url, {
+        params: {
+          q: "*",
+          per_page: 250,
+          page: page,
+        },
+        headers: {
+          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
+        },
+      });
 
       const records = response.data.hits.map((hit) => ({
         id: hit.document.id,
@@ -420,22 +418,20 @@ async function typesense_compliance_collection_2() {
   let allRecords = [];
   let page = 1;
   let hasMoreRecords = true;
+  const url = process.env.TS_URL_PROD_COMPLIENCE_SINGLE;
 
   while (hasMoreRecords) {
     try {
-      const response = await axios.get(
-        "https://h3ques1ic9vt6z4rp-1.a1.typesense.net/collections/compliance_collection_2/documents/search",
-        {
-          params: {
-            q: "*",
-            per_page: 250,
-            page: page,
-          },
-          headers: {
-            "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
-          },
-        }
-      );
+      const response = await axios.get(url, {
+        params: {
+          q: "*",
+          per_page: 250,
+          page: page,
+        },
+        headers: {
+          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
+        },
+      });
 
       const records = response.data.hits.map((hit) => ({
         id: hit.document.id,
@@ -463,19 +459,19 @@ router.get("/company_profile_collection", async (req, res) => {
     // Fetch and compare data
     const [
       apiComparisonResult,
-      // typesenseComparisonResult,
-      // complianceComparisonResult,
+      typesenseComparisonResult,
+      complianceComparisonResult,
     ] = await Promise.all([
       compareApiWithTypesense(),
-      // compareTypesenseCollections(),
-      // compareComplianceWithAPI(), // Add the new comparison function
+      compareTypesenseCollections(),
+      compareComplianceWithAPI(), 
     ]);
 
     // Combine the results from all comparisons
     const combinedResults = {
       apiComparison: apiComparisonResult,
-      // typesenseComparison: typesenseComparisonResult,
-      // complianceComparison: complianceComparisonResult, // Include the new results
+      typesenseComparison: typesenseComparisonResult,
+      complianceComparison: complianceComparisonResult, 
     };
 
     // Return the combined results
@@ -642,8 +638,6 @@ router.get("/single/:symbol", async (req, res) => {
     }
   }
 });
-
-
 
 router.get("/single2/:symbol", async (req, res) => {
   const symbol = req.params.symbol;
@@ -828,6 +822,5 @@ router.get("/single2/:symbol", async (req, res) => {
     }
   }
 });
-
 
 export default router;

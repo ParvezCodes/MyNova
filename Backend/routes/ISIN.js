@@ -79,16 +79,14 @@ router.get("/compareIsinCpSm", async (req, res) => {
 });
 
 async function fetchAllTypeSenseData() {
+  const url = process.env.TS_URL_UAT;
   try {
-    const response = await axios.get(
-      "https://kn2smbywvz1li8hrp-1.a1.typesense.net/collections/company_profile_collection_nova/documents/export",
-      {
-        headers: {
-          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_UAT,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.get(url, {
+      headers: {
+        "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_UAT,
+        "Content-Type": "application/json",
+      },
+    });
 
     // Aggregate all documents into an array
     const typeSenseDataArray = [];
@@ -201,16 +199,14 @@ router.get("/compareIsinTS", async (req, res) => {
 });
 
 async function fetchAllTypeSenseData2() {
+  const url = process.env.TS_URL_UAT;
   try {
-    const response = await axios.get(
-      "https://kn2smbywvz1li8hrp-1.a1.typesense.net/collections/company_profile_collection_nova/documents/export",
-      {
-        headers: {
-          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_UAT,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.get(url, {
+      headers: {
+        "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_UAT,
+        "Content-Type": "application/json",
+      },
+    });
 
     // Aggregate all documents into an array
     const typeSenseDataArray = [];

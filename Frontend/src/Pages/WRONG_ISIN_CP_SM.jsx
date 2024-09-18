@@ -54,7 +54,7 @@ const WRONG_ISIN_CP_SM = () => {
     <tr key={index}>
       <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
         <img
-          src={item.profileLogo}
+          src={item.logo}
           alt={item.companyName || "N/A"}
           className="w-14 h-14 bg-gray-100 object-cover object-center flex-shrink-0 mr-4"
         />
