@@ -7,6 +7,7 @@ import MisMatch_PCP_LCP from "./Pages/MisMatch_PCP_LCP";
 import WRONG_ISIN_CP_SM from "./Pages/WRONG_ISIN_CP_SM";
 import "./index.css";
 import TS_Search from "./Pages/TS_Search";
+import Update_TypesenseCM from "./Pages/Update_TypesenseCM";
 
 export const URL = "http://localhost:5000";
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/isin" element={<WRONG_ISIN_CP_SM />} />
         <Route path="/prodCPlambdaCP" element={<MisMatch_PCP_LCP />} />
         <Route path="/searchTS" element={<TS_Search />} />
+        <Route path="/fixts" element={<Update_TypesenseCM />} />
       </Routes>
     </>
   );

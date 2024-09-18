@@ -10,6 +10,7 @@ import SearchRouter from "./routes/Search.js";
 import NovaProdRouter from "./routes/NovaProd.js";
 import singleStatusRouter from "./routes/singleStatus.js";
 import TSRouter from "./routes/TS.js";
+import TSUpdateCM from "./routes/Update_TP_CM.js";
 
 const app = express();
 
@@ -27,5 +28,6 @@ app.use("/api/v1/search", SearchRouter);
 app.use("/api/v1/compare", NovaProdRouter);
 app.use("/api/v1/statusSingle", singleStatusRouter);
 app.use("/api/v1/ts", TSRouter);
+app.use("/api/v1/tsupdate", TSUpdateCM);
 
 export default app;

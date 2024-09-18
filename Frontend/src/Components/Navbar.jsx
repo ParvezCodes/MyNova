@@ -28,6 +28,9 @@ const Navbar = () => {
           <Link to="/prodCPlambdaCP" className="mr-5 hover:text-white">
             CP
           </Link>
+          <Link to="/fixts" className="mr-5 hover:text-white">
+          UpdateTS
+          </Link>
         </nav>
         <button className="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
           Button
