@@ -464,14 +464,14 @@ router.get("/company_profile_collection", async (req, res) => {
     ] = await Promise.all([
       compareApiWithTypesense(),
       compareTypesenseCollections(),
-      compareComplianceWithAPI(), 
+      compareComplianceWithAPI(),
     ]);
 
     // Combine the results from all comparisons
     const combinedResults = {
       apiComparison: apiComparisonResult,
       typesenseComparison: typesenseComparisonResult,
-      complianceComparison: complianceComparisonResult, 
+      complianceComparison: complianceComparisonResult,
     };
 
     // Return the combined results
@@ -483,163 +483,6 @@ router.get("/company_profile_collection", async (req, res) => {
 });
 
 router.get("/single/:symbol", async (req, res) => {
-  const symbol = req.params.symbol;
-
-  try {
-    // get company_profile data from ts
-    const companyProfile = await axios.get(
-      `https://h3ques1ic9vt6z4rp-1.a1.typesense.net/collections/company_profile_collection/documents/${symbol}`,
-      {
-        headers: {
-          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
-        },
-      }
-    );
-
-    if (!companyProfile.data) {
-      return res.status(404).json({
-        error: "Symbol not found in company_profile_collection Typesense",
-      });
-    }
-
-    const { compliantRanking, id, isin, shariahCompliantStatus } =
-      companyProfile.data;
-
-    // get complianceMerlin data from ts
-    const complianceMerlin = await axios.get(
-      `https://h3ques1ic9vt6z4rp-1.a1.typesense.net/collections/compliance_collection_2/documents/${isin}`,
-      {
-        headers: {
-          "X-TYPESENSE-API-KEY": process.env.TS_API_KEY_PROD,
-        },
-      }
-    );
-
-    if (!complianceMerlin) {
-      return res.status(404).json({
-        error: "Symbol not found in compliance_collection_2 Typesense",
-      });
-    }
-
-    const {
-      id: complianceId,
-      isin: complianceIsin,
-      ranking,
-      status,
-      stockName,
-    } = complianceMerlin.data;
-
-    const db_data = await axios.get(
-      "https://beta.infomanav.in/keep/finnhub_api_dev/prod/report/ALL_report_last_update.php"
-    );
-
-    if (!db_data.data) {
-      return res.status(404).json({ error: "Symbol not found in DB API" });
-    }
-
-    const reportData = db_data.data;
-    const matchingSymbol = reportData.find((item) => item.stock_name === id);
-
-    if (matchingSymbol) {
-      var {
-        stock_name,
-        isin: reportIsin,
-        new_isin,
-        status: reportStatus,
-        ranking: reportRanking,
-      } = matchingSymbol;
-    } else {
-      var stock_name = null,
-        reportIsin = null,
-        new_isin = null,
-        reportStatus = null,
-        reportRanking = null;
-    }
-
-    const trimmedIsin = isin.trim();
-    const trimmedComplianceIsin = complianceIsin.trim();
-    const trimmedReportIsin = reportIsin ? reportIsin.trim() : null;
-
-    const trimmedRanking = compliantRanking.toString().trim();
-    const trimmedComplianceRanking = ranking.toString().trim();
-    const trimmedReportRanking = reportRanking
-      ? reportRanking.toString().trim()
-      : null;
-
-    const trimmedStatus = shariahCompliantStatus.trim();
-    const trimmedComplianceStatus = status.trim();
-    const trimmedReportStatus = reportStatus ? reportStatus.trim() : null;
-
-    // Field consistency checks
-    const isinMatch =
-      trimmedIsin === trimmedComplianceIsin &&
-      trimmedIsin === trimmedReportIsin;
-    const rankingMatch =
-      trimmedRanking === trimmedComplianceRanking &&
-      trimmedRanking === trimmedReportRanking;
-    const statusMatch =
-      trimmedStatus === trimmedComplianceStatus &&
-      trimmedStatus === trimmedReportStatus;
-
-    res.json({
-      CompanyProfileTS: {
-        compliantRanking,
-        symbol: id,
-        isin,
-        shariahCompliantStatus,
-      },
-      complianceMerlinTS: {
-        id: complianceId,
-        isin: complianceIsin,
-        ranking,
-        status,
-        stockName,
-      },
-      db_report: {
-        stock_name,
-        isin: reportIsin,
-        new_isin,
-        status: reportStatus,
-        ranking: reportRanking,
-      },
-      match: {
-        isinMatch,
-        rankingMatch,
-        statusMatch,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    if (error.response) {
-      if (error.response.config.url.includes("company_profile_collection")) {
-        res.status(404).json({
-          error: "Symbol not found in company_profile_collection Typesense",
-        });
-      } else if (
-        error.response.config.url.includes("compliance_collection_2")
-      ) {
-        res.status(404).json({
-          error: "Symbol not found in compliance_collection_2 Typesense",
-        });
-      } else if (
-        error.response.config.url.includes("report/ALL_report_last_update")
-      ) {
-        res.status(404).json({ error: "Symbol not found in DB  API" });
-      } else {
-        res
-          .status(500)
-          .json({ error: "An unknown error occurred", details: error.message });
-      }
-    } else {
-      res.status(500).json({
-        error: "Internal Server Error",
-        details: error.message,
-      });
-    }
-  }
-});
-
-router.get("/single2/:symbol", async (req, res) => {
   const symbol = req.params.symbol;
 
   try {

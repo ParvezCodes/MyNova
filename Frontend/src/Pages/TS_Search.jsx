@@ -19,7 +19,7 @@ const TS_Search = () => {
     setError(null);
 
     try {
-      const res = await axios.get(`${URL}/api/v1/ts/single2/${symbol}`);
+      const res = await axios.get(`${URL}/api/v1/ts/single/${symbol}`);
       setData(res.data);
       console.log(res);
     } catch (error) {

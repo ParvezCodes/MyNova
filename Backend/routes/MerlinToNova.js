@@ -1,12 +1,14 @@
-// dataTransferRouter.js
+import { config } from "dotenv";
+config();
+
 import { Router } from "express";
-import mysql from "mysql2/promise"; // MySQL client with promise support
-import pkg from "pg"; // Default import for pg
+import mysql from "mysql2/promise";
+import pkg from "pg";
 const { Client } = pkg;
+import { createPgClient } from "../DB/DB.js";
 
 const router = Router();
 
-// PostgreSQL and MySQL connection configurations
 const pgConfig = {
   host: process.env.PG_HOST,
   user: process.env.PG_USER,
@@ -21,19 +23,16 @@ const mysqlConfig = {
   database: "nova_beta",
 };
 
-// Route to trigger data transfer for a specific symbol
 router.get("/transfer/:symbol", async (req, res) => {
   const { symbol } = req.params;
   let pgClient;
   let mysqlConnection;
 
   try {
-    // Connect to PostgreSQL
-    pgClient = new Client(pgConfig);
+    pgClient = createPgClient();
     await pgClient.connect();
     console.log("Connected to PostgreSQL.");
 
-    // Fetch data from PostgreSQL for the specific symbol
     console.log(`Fetching data from PostgreSQL for symbol: ${symbol}`);
     const pgRes = await pgClient.query(
       "SELECT * FROM at_company_profile WHERE ticker = $1",
@@ -42,11 +41,9 @@ router.get("/transfer/:symbol", async (req, res) => {
     const rows = pgRes.rows;
     console.log(`Fetched ${rows.length} rows from PostgreSQL.`);
 
-    // Connect to MySQL
     mysqlConnection = await mysql.createConnection(mysqlConfig);
     console.log("Connected to MySQL.");
 
-    // Loop through each row from PostgreSQL and insert into MySQL
     for (const row of rows) {
       try {
         // Prepare the insert query
@@ -62,7 +59,6 @@ router.get("/transfer/:symbol", async (req, res) => {
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        // Map the fields from PostgreSQL to MySQL, inserting null where necessary
         const values = [
           row.exchange || null,
           row.ticker || null,
