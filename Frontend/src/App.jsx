@@ -8,6 +8,7 @@ import WRONG_ISIN_CP_SM from "./Pages/WRONG_ISIN_CP_SM";
 import "./index.css";
 import TS_Search from "./Pages/TS_Search";
 import Update_TypesenseCM from "./Pages/Update_TypesenseCM";
+import MerlinToNova from "./Pages/MerlinToNova";
 
 export const URL = "http://localhost:5000";
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/prodCPlambdaCP" element={<MisMatch_PCP_LCP />} />
         <Route path="/searchTS" element={<TS_Search />} />
         <Route path="/fixts" element={<Update_TypesenseCM />} />
+        <Route path="/merlinTonova" element={<MerlinToNova />} />
       </Routes>
     </>
   );
