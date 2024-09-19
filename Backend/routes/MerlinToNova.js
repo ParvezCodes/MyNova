@@ -1,28 +1,28 @@
 // dataTransferRouter.js
-import { Router } from 'express';
-import mysql from 'mysql2/promise'; // MySQL client with promise support
-import pkg from 'pg'; // Default import for pg
+import { Router } from "express";
+import mysql from "mysql2/promise"; // MySQL client with promise support
+import pkg from "pg"; // Default import for pg
 const { Client } = pkg;
 
 const router = Router();
 
 // PostgreSQL and MySQL connection configurations
 const pgConfig = {
-  host: "104.155.188.135",
-  user: "postgres",
-  password: "accounting",
-  database: "company_profile",
+  host: process.env.PG_HOST,
+  user: process.env.PG_USER,
+  password: process.env.PG_PASS,
+  database: process.env.PG_DB,
 };
 
 const mysqlConfig = {
-  host: "34.93.18.241",
-  user: "root",
-  password: "test2k",
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
   database: "nova_beta",
 };
 
 // Route to trigger data transfer for a specific symbol
-router.get('/transfer/:symbol', async (req, res) => {
+router.get("/transfer/:symbol", async (req, res) => {
   const { symbol } = req.params;
   let pgClient;
   let mysqlConnection;
@@ -31,17 +31,20 @@ router.get('/transfer/:symbol', async (req, res) => {
     // Connect to PostgreSQL
     pgClient = new Client(pgConfig);
     await pgClient.connect();
-    console.log('Connected to PostgreSQL.');
+    console.log("Connected to PostgreSQL.");
 
     // Fetch data from PostgreSQL for the specific symbol
     console.log(`Fetching data from PostgreSQL for symbol: ${symbol}`);
-    const pgRes = await pgClient.query('SELECT * FROM at_company_profile WHERE ticker = $1', [symbol]);
+    const pgRes = await pgClient.query(
+      "SELECT * FROM at_company_profile WHERE ticker = $1",
+      [symbol]
+    );
     const rows = pgRes.rows;
     console.log(`Fetched ${rows.length} rows from PostgreSQL.`);
 
     // Connect to MySQL
     mysqlConnection = await mysql.createConnection(mysqlConfig);
-    console.log('Connected to MySQL.');
+    console.log("Connected to MySQL.");
 
     // Loop through each row from PostgreSQL and insert into MySQL
     for (const row of rows) {
@@ -101,24 +104,28 @@ router.get('/transfer/:symbol', async (req, res) => {
           row.state || null,
           row.us_share || null,
           row.weburl || null,
-          row.publish_un_publish === 'PUBLISH' ? 1 : 0,
+          row.publish_un_publish === "PUBLISH" ? 1 : 0,
           row.create_date_time || null,
           row.last_update_time || null,
         ];
 
         // Execute the insert query
         await mysqlConnection.execute(insertQuery, values);
-        console.log(`Inserted record with company_symbol = ${row.ticker} and exchange_symbol = ${row.exchange}`);
+        console.log(
+          `Inserted record with company_symbol = ${row.ticker} and exchange_symbol = ${row.exchange}`
+        );
       } catch (insertError) {
-        console.error(`Error inserting record with company_symbol = ${row.ticker} and exchange_symbol = ${row.exchange}:`, insertError.stack);
+        console.error(
+          `Error inserting record with company_symbol = ${row.ticker} and exchange_symbol = ${row.exchange}:`,
+          insertError.stack
+        );
       }
     }
 
-    console.log('Data transfer complete.');
+    console.log("Data transfer complete.");
     res.send(`Data transfer complete for symbol: ${symbol}`);
-
   } catch (err) {
-    console.error('Error transferring data:', err.stack);
+    console.error("Error transferring data:", err.stack);
     res.status(500).send(`Error transferring data for symbol: ${symbol}`);
   } finally {
     // Close PostgreSQL connection

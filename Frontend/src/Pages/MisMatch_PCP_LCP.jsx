@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "../Components/Loader";
+import { URL } from "../App";
 
 const MisMatch_PCP_LCP = () => {
   const [data, setData] = useState([]);
@@ -13,9 +14,7 @@ const MisMatch_PCP_LCP = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/v1/compare/pcplcp`
-        );
+        const response = await axios.get(`${URL}/api/v1/compare/pcplcp`);
         console.log(response);
         setData(response.data);
         setLoading(false);
