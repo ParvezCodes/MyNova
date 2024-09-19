@@ -1,14 +1,15 @@
 import { Routes, Route } from "react-router-dom";
-import WRONG_ISIN_TS_CP from "./Pages/WRONG_ISIN_TS_CP";
-import Navbar from "./Components/Navbar";
-import { Toaster } from "react-hot-toast";
-import Search from "./Pages/Search";
-import MisMatch_PCP_LCP from "./Pages/MisMatch_PCP_LCP";
-import WRONG_ISIN_CP_SM from "./Pages/WRONG_ISIN_CP_SM";
-import "./index.css";
-import TS_Search from "./Pages/TS_Search";
 import Update_TypesenseCM from "./Pages/Update_TypesenseCM";
+import WRONG_ISIN_TS_CP from "./Pages/WRONG_ISIN_TS_CP";
+import WRONG_ISIN_CP_SM from "./Pages/WRONG_ISIN_CP_SM";
+import MisMatch_PCP_LCP from "./Pages/MisMatch_PCP_LCP";
 import MerlinToNova from "./Pages/MerlinToNova";
+import { Toaster } from "react-hot-toast";
+import TS_Search from "./Pages/TS_Search";
+import Navbar from "./Components/Navbar";
+import Search from "./Pages/Search";
+import Footer from "./Components/Footer";
+import "./index.css";
 
 export const URL = "http://localhost:5000";
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/fixts" element={<Update_TypesenseCM />} />
         <Route path="/merlinTonova" element={<MerlinToNova />} />
       </Routes>
+      <Footer />
     </>
   );
 }
