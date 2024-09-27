@@ -39,7 +39,12 @@ router.get("/transfer/:symbol", async (req, res) => {
       [symbol]
     );
     const rows = pgRes.rows;
+    const db_res = `Fetched ${rows.length} rows from PostgreSQL.`;
     console.log(`Fetched ${rows.length} rows from PostgreSQL.`);
+
+    if (rows.length === 0) {
+      return res.send(`Not Found , Fetched ${rows.length} rows from PostgreSQL.`);
+    }
 
     mysqlConnection = await mysql.createConnection(mysqlConfig);
     console.log("Connected to MySQL.");
@@ -122,6 +127,7 @@ router.get("/transfer/:symbol", async (req, res) => {
     res.send(`Data transfer complete for symbol: ${symbol}`);
   } catch (err) {
     console.error("Error transferring data:", err.stack);
+    console.error("Error transferring data:", err);
     res.status(500).send(`Error transferring data for symbol: ${symbol}`);
   } finally {
     // Close PostgreSQL connection

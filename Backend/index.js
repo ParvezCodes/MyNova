@@ -3,9 +3,8 @@ config({
   path: "./DB/.env",
 });
 
-
-import express from "express";
 import cors from "cors";
+import express from "express";
 import IsinRouter from "./routes/ISIN.js";
 import SearchRouter from "./routes/Search.js";
 import NovaProdRouter from "./routes/NovaProd.js";
