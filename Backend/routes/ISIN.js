@@ -194,7 +194,7 @@ router.get("/compareIsinTS", async (req, res) => {
     res.status(200).json(response);
   } catch (error) {
     console.error("Error comparing ISINs:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" ,error});
   }
 });
 

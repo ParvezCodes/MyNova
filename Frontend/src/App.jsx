@@ -10,6 +10,7 @@ import Navbar from "./Components/Navbar";
 import Search from "./Pages/Search";
 import Footer from "./Components/Footer";
 import "./index.css";
+import MismatchReport_CmMerlin_TSComplience from "./Pages/MismatchReport_CmMerlin_TSComplience";
 
 export const URL = "http://localhost:5000";
 
@@ -19,16 +20,32 @@ function App() {
       <Navbar />
       <Toaster />
       <Routes>
-        <Route path="/" element={<TS_Search />} />
-        <Route path="/searchTS" element={<WRONG_ISIN_TS_CP />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/isin" element={<WRONG_ISIN_CP_SM />} />
-        <Route path="/prodCPlambdaCP" element={<MisMatch_PCP_LCP />} />
-        <Route path="/searchTS" element={<TS_Search />} />
-        <Route path="/fixts" element={<Update_TypesenseCM />} />
-        <Route path="/merlinTonova" element={<MerlinToNova />} />
+        <Route path="/keep/Nova_Helper" element={<TS_Search />} />
+        <Route
+          path="/keep/Nova_Helper/searchTS"
+          element={<WRONG_ISIN_TS_CP />}
+        />
+        <Route path="/keep/Nova_Helper/search" element={<Search />} />
+        <Route path="/keep/Nova_Helper/isin" element={<WRONG_ISIN_CP_SM />} />
+        <Route
+          path="/keep/Nova_Helper/prodCPlambdaCP"
+          element={<MisMatch_PCP_LCP />}
+        />
+        {/* <Route path="/keep/Nova_Helper/searchTS" element={<TS_Search />} /> */}
+        <Route
+          path="/keep/Nova_Helper/fixts"
+          element={<Update_TypesenseCM />}
+        />
+        <Route
+          path="/keep/Nova_Helper/merlinTonova"
+          element={<MerlinToNova />}
+        />
+        <Route
+          path="/keep/Nova_Helper//mismatchReports"
+          element={<MismatchReport_CmMerlin_TSComplience />}
+        />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

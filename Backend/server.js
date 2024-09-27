@@ -1,6 +1,5 @@
 import app from "./index.js";
 import { testConnection } from "./DB/DB.js";
-import axios from "axios";
 
 testConnection();
 
