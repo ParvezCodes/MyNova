@@ -3,7 +3,14 @@ import React from "react";
 const MismatchTable = ({ mismatches }) => {
   const exportToCSV = () => {
     // Create CSV headers
-    const headers = ["Stock Name", "ISIN", "Field", "DB Value", "TS Value"];
+    const headers = [
+      "Main ticker",
+      "Stock Name",
+      "ISIN",
+      "Field",
+      "DB Value",
+      "TS Value",
+    ];
 
     // Prepare CSV rows
     const rows = mismatches.flatMap((mismatch) =>
@@ -47,15 +54,18 @@ const MismatchTable = ({ mismatches }) => {
         <thead className="bg-gray-800">
           <tr className="bg-gray-700">
             <th className="p-2 border border-gray-700 text-gray-300">
-              Stock Name
+             Main Ticker
+            </th>
+            <th className="p-2 border border-gray-700 text-gray-300">
+              SubTicker
             </th>
             <th className="p-2 border border-gray-700 text-gray-300">ISIN</th>
             <th className="p-2 border border-gray-700 text-gray-300">Field</th>
             <th className="p-2 border border-gray-700 text-gray-300">
-              DB Value
+              Nova Prod
             </th>
             <th className="p-2 border border-gray-700 text-gray-300">
-              TS Value
+              Compliance Collection 2
             </th>
           </tr>
         </thead>
@@ -65,6 +75,12 @@ const MismatchTable = ({ mismatches }) => {
               <tr key={`${index}-${idx}`} className="border-b border-gray-300">
                 {idx === 0 && (
                   <>
+                    <td
+                      className="p-2 border border-gray-700"
+                      rowSpan={mismatch.mismatches.length}
+                    >
+                      {mismatch.main_ticker}
+                    </td>
                     <td
                       className="p-2 border border-gray-700"
                       rowSpan={mismatch.mismatches.length}

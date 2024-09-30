@@ -41,7 +41,7 @@ function App() {
           element={<MerlinToNova />}
         />
         <Route
-          path="/keep/Nova_Helper//mismatchReports"
+          path="/keep/Nova_Helper/mismatchReports"
           element={<MismatchReport_CmMerlin_TSComplience />}
         />
       </Routes>

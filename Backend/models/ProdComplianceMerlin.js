@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../DB/DB.js";
+import sequelize from "../DB/NovaProd_DB.js";
 
-const ComplianceMerlin = sequelize.define(
-  "ComplianceMerlin",
+const ProdComplianceMerlin = sequelize.define(
+  "ProdComplianceMerlin",
   {
     id: {
       type: DataTypes.BIGINT,
@@ -173,9 +173,9 @@ const ComplianceMerlin = sequelize.define(
     },
   },
   {
-    tableName: "compliance_merlin_2",
-    timestamps: false, 
+    tableName: "compliance_merlin",
+    timestamps: false,
   }
 );
 
-export default ComplianceMerlin;
+export default ProdComplianceMerlin;

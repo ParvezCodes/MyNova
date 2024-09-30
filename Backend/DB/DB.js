@@ -16,7 +16,7 @@ const sequelize = new Sequelize(
   }
 );
 
-// console.log("HOST : ", process.env.HOST);
+
 
 export const testConnection = async () => {
   try {
@@ -26,6 +26,8 @@ export const testConnection = async () => {
     console.error("DB Connection Failed:", error);
   }
 };
+
+
 
 export function createPgClient() {
   const client = new Client({

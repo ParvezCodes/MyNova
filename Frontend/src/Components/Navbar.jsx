@@ -44,7 +44,7 @@ const Navbar = () => {
             MerlinToNova
           </Link>
           <Link
-            to="/keep/Nova_Helper//mismatchReports"
+            to="/keep/Nova_Helper/mismatchReports"
             className="mr-5 hover:text-white"
           >
             Mismatch Report

@@ -8,6 +8,9 @@ const MismatchReport_CmMerlin_TSComplience = () => {
   const [mismatches, setMismatches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
+  const [notFound, setNotFound] = useState(0);
+  const [subTickernotFound, SetSubTickerNotFound] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,14 +31,20 @@ const MismatchReport_CmMerlin_TSComplience = () => {
         }
       );
 
+      console.log(response);
+
       if (response.data.mismatches.length > 0) {
         setMismatches(response.data.mismatches);
       } else {
         setMismatches([]);
         alert("No mismatches found");
       }
+
+      setTotalCount(response.data.totalCount || 0);
+      setNotFound(response.data.notFoundInTypesenseCount || 0);
+      SetSubTickerNotFound(response.data.noTickerMatchCount || 0);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       setError(err.response?.data?.msg || "An error occurred");
     } finally {
       setLoading(false);
@@ -43,39 +52,77 @@ const MismatchReport_CmMerlin_TSComplience = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">
-        Report Mismatch in TYS and ComplianceMerlin
-      </h1>
+    <div className="max-w-6xl mx-auto p-6 bg-gray-900 text-gray-300 min-h-screen">
+      <div className="bg-gray-800 shadow-lg rounded-lg p-6">
+        <h1 className="text-3xl font-semibold text-white mb-6">
+          Typesense vs Compliance Merlin Mismatch Report
+        </h1>
+        <p className="text-gray-400 mb-4">
+          Compare records between TYS and ComplianceMerlin for a specific date.
+        </p>
 
-      {/* Search Bar and Button Div */}
-      <div className="flex mb-4">
-        <input
-          type="text"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="border border-gray-300 rounded-md p-2 w-full mr-2"
-          placeholder="Enter Date (DD-MM-YYYY)"
-          required
-        />
-        <button
-          type="submit"
-          onClick={handleSubmit}
-          className="bg-blue-500 text-white py-2 px-4 rounded-md"
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Check Compliance"}
-        </button>
-      </div>
-
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-
-      {/* Table Div */}
-      {mismatches.length > 0 && (
-        <div className="overflow-x-auto">
-          <MismatchTable mismatches={mismatches} />
+        {/* Search Bar */}
+        <div className="flex items-center mb-6">
+          <input
+            type="text"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="border border-gray-700 bg-gray-700 text-gray-300 rounded-md p-3 w-full mr-4 focus:ring focus:ring-blue-500"
+            placeholder="Enter Date (DD-MM-YYYY)"
+            required
+          />
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className={`bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-200 ${
+              loading && "cursor-not-allowed"
+            }`}
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Check"}
+          </button>
         </div>
-      )}
+
+        {/* Error Message */}
+        {error && <div className="text-red-400 mb-4 text-sm">{error}</div>}
+
+        {/* Results Overview */}
+        {!loading && !error && (
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="bg-gray-700 p-4 rounded-md text-center">
+              <p className="text-gray-400">Total Records Checked</p>
+              <p className="text-xl font-bold text-gray-200">{totalCount}</p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-md text-center">
+              <p className="text-gray-400">Not Found in TS</p>
+              <p className="text-xl font-bold text-gray-200">{notFound}</p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-md text-center">
+              <p className="text-gray-400">Subticker not found in ts</p>
+              <p className="text-xl font-bold text-gray-200">
+                {subTickernotFound}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Mismatch Table */}
+        {mismatches.length > 0 ? (
+          <div className="overflow-x-auto bg-gray-800 rounded-lg shadow-md p-4 mt-6">
+            <h2 className="text-xl font-semibold mb-4 text-gray-300">
+              Mismatch Details
+            </h2>
+            <MismatchTable mismatches={mismatches} />
+          </div>
+        ) : (
+          !loading &&
+          !error && (
+            <div className="text-gray-400 mt-6 text-center">
+              No mismatches found for the selected date.
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 };
