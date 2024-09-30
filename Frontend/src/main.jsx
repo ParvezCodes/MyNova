@@ -7,7 +7,7 @@ import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/keep/Nova_Helper">
       <App />
     </BrowserRouter>
   </StrictMode>

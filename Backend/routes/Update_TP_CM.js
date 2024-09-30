@@ -88,9 +88,9 @@ router.post("/update", async (req, res) => {
 router.get("/getUpdatedrecords", async (req, res) => {
   try {
     const updatedRecords = await UpdatedTypesense.findAll();
-    res.status(200).json(updatedRecords);
+    res.status(200).json({updatedRecords});
   } catch (error) {
-    res.status(500).json({ msg: "Internal Server Error" }, error);
+    res.status(500).json({ msg: "Internal Server Error" ,error});
   }
 });
 

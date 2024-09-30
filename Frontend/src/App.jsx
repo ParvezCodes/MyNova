@@ -20,28 +20,16 @@ function App() {
       <Navbar />
       <Toaster />
       <Routes>
-        <Route path="/keep/Nova_Helper" element={<TS_Search />} />
-        <Route
-          path="/keep/Nova_Helper/searchTS"
-          element={<WRONG_ISIN_TS_CP />}
-        />
-        <Route path="/keep/Nova_Helper/search" element={<Search />} />
-        <Route path="/keep/Nova_Helper/isin" element={<WRONG_ISIN_CP_SM />} />
-        <Route
-          path="/keep/Nova_Helper/prodCPlambdaCP"
-          element={<MisMatch_PCP_LCP />}
-        />
+        <Route path="/" element={<TS_Search />} />
+        <Route path="/searchTS" element={<WRONG_ISIN_TS_CP />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/isin" element={<WRONG_ISIN_CP_SM />} />
+        <Route path="/prodCPlambdaCP" element={<MisMatch_PCP_LCP />} />
         {/* <Route path="/keep/Nova_Helper/searchTS" element={<TS_Search />} /> */}
+        <Route path="/fixts" element={<Update_TypesenseCM />} />
+        <Route path="/merlinTonova" element={<MerlinToNova />} />
         <Route
-          path="/keep/Nova_Helper/fixts"
-          element={<Update_TypesenseCM />}
-        />
-        <Route
-          path="/keep/Nova_Helper/merlinTonova"
-          element={<MerlinToNova />}
-        />
-        <Route
-          path="/keep/Nova_Helper/mismatchReports"
+          path="/mismatchReports"
           element={<MismatchReport_CmMerlin_TSComplience />}
         />
       </Routes>
